@@ -84,23 +84,105 @@ public class LeetCode01 {
      * 输出：7, nums = [0,0,1,1,2,3,3]
      * 解释：函数应返回新长度 length = 7, 并且原数组的前七个元素被修改为 0, 0, 1, 1, 2, 3, 3。
      * 不需要考虑数组中超出新长度后面的元素。
+     * 快慢指针，遇到相同元素，计数器加1，如果计数器小于2，则将当前元素赋值给slow，
+     * 否则跳过该元素，fast指针继续移动
      *
      * @param
      */
-//    public int removeDuplicates2(int[] nums) {
-//        int fast = 1;
-//        int slow = 0;
-//        int count = 1;
-//        while(fast < nums.length){
-//            if(count < 3 && nums[slow] != nums[fast]){
-//             }
+    public int removeDuplicates2(int[] nums) {
+        int fast = 1;
+        int slow = 0;
+        int count = 1;
+        while (fast < nums.length) {
+            if (nums[fast] == nums[slow]) {
+                if (count < 2) {
+                    nums[++slow] = nums[fast];
+                    count++;
+                }
+                fast++;
+            } else {
+                nums[++slow] = nums[fast];
+                count = 1;
+                fast++;
+            }
+        }
+        return slow + 1;
+    }
+
+    /**
+     * 169. 求众数
+     * 输入：nums = [2,2,1,1,1,2,2]
+     * 输出：2
+     *
+     * @param nums
+     * @return 排序后，众数会出现在中间，取中间值
+     */
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+
+    /**
+     * 45. 跳跃游戏 II
+     * 输入: nums = [2,3,1,1,4]
+     * 输出: 2
+     * 解释: 跳到最后一个位置的最小跳跃数是 2。
+     * 从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+     * 经典贪心算法，从后往前。
+     * @param nums
+     * @return
+     */
+    public int jump(int[] nums) {
+        int len = nums.length;
+        int j = len - 1;
+        int count = 0;
+        while (j > 0) {
+            for (int i = 0; i < j; i++)
+                if (nums[i] + i >= j) {
+                    j = i;
+                    count++;
+                    break;
+                }
+        }
+        return count;
+    }
+
+    /**
+     * 380. O(1) 时间插入、删除和获取随机元素
+     * 实现RandomizedSet 类：
+     *
+     * RandomizedSet() 初始化 RandomizedSet 对象
+     * bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。
+     * bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。
+     * int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。
+     * 你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。
+     */
+//    class RandomizedSet {
+//
+//        public RandomizedSet() {
+//            RandomizedSet randomizedSet=new RandomizedSet();
+//
 //        }
 //
+//        public boolean insert(int val) {
+//            if(val == null){
+//                randomizedSet.insert(val)
+//            }else{
+//                return false;
+//            }
+//
+//        }
+//        public boolean remove(int val) {
+//        }
+//
+//        public int getRandom() {
+//        }
 //    }
 
     public static void main(String[] args) {
-        int[] nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+        int[] nums = {2,3,1,1,4};
         LeetCode01 leetCode01 = new LeetCode01();
+        System.out.println(leetCode01.jump(nums));
 
     }
 }
