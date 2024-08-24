@@ -148,41 +148,50 @@ public class LeetCode01 {
     }
 
     /**
-     * 380. O(1) 时间插入、删除和获取随机元素
-     * 实现RandomizedSet 类：
-     *
-     * RandomizedSet() 初始化 RandomizedSet 对象
-     * bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。
-     * bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。
-     * int getRandom() 随机返回现有集合中的一项（测试用例保证调用此方法时集合中至少存在一个元素）。每个元素应该有 相同的概率 被返回。
-     * 你必须实现类的所有函数，并满足每个函数的 平均 时间复杂度为 O(1) 。
+     * 121. 买卖股票的最佳时机
+     * 输入：[7,1,5,3,6,4]
+     * 输出：5
+     * 解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     *      注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+     * @param prices
+     * @return
+     * 动态规划，拿最小值，找差价最大值
      */
-//    class RandomizedSet {
-//
-//        public RandomizedSet() {
-//            RandomizedSet randomizedSet=new RandomizedSet();
-//
-//        }
-//
-//        public boolean insert(int val) {
-//            if(val == null){
-//                randomizedSet.insert(val)
-//            }else{
-//                return false;
-//            }
-//
-//        }
-//        public boolean remove(int val) {
-//        }
-//
-//        public int getRandom() {
-//        }
-//    }
+    public int maxProfit(int[] prices) {
+        int min = Integer.MAX_VALUE;
+        int count = 0;
+        for(int i=0;i<prices.length;i++){
+            min=Math.min(min,prices[i]);
+            count=Math.max(count,prices[i]-min);
+        }
+        return count;
+    }
+
+    /**
+     * 122. 买卖股票的最佳时机 II
+     * 输入：prices = [7,1,5,3,6,4]
+     * 输出：7
+     * 解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4。
+     * 随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3。
+     * 最大总利润为 4 + 3 = 7 。
+     * @param prices
+     * 动态规划，挣到所有涨幅，避开所有降幅
+     */
+    public int maxProfit2(int[] prices) {
+        int count = 0;
+        for(int i=0;i<prices.length-1;i++){
+            if(prices[i]<prices[i+1]){
+                count+=prices[i+1]-prices[i];
+            }
+        }
+        return count;
+    }
+
 
     public static void main(String[] args) {
-        int[] nums = {2,3,1,1,4};
+        int[] nums = {7,1,5,3,6,4};
         LeetCode01 leetCode01 = new LeetCode01();
-        System.out.println(leetCode01.jump(nums));
+        System.out.println(leetCode01.maxProfit2(nums));
 
     }
 }
