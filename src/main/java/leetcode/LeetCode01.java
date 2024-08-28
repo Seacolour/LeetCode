@@ -247,11 +247,87 @@ public class LeetCode01 {
         return true;
     }
 
+    /**
+     * 134. 加油站
+     * 输入: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+     * 输出: 3
+     * 解释:
+     * 从 3 号加油站(索引为 3 处)出发，可获得 4 升汽油。此时油箱有 = 0 + 4 = 4 升汽油
+     * 开往 4 号加油站，此时油箱有 4 - 1 + 5 = 8 升汽油
+     * 开往 0 号加油站，此时油箱有 8 - 2 + 1 = 7 升汽油
+     * 开往 1 号加油站，此时油箱有 7 - 3 + 2 = 6 升汽油
+     * 开往 2 号加油站，此时油箱有 6 - 4 + 3 = 5 升汽油
+     * 开往 3 号加油站，你需要消耗 5 升汽油，正好足够你返回到 3 号加油站。
+     * 因此，3 可为起始索引。
+     * @param gas
+     * @param cost
+     * @return
+     * 一次遍历，累加油量和耗油量，如果总耗油量大于总油量，则无法完成一圈，返回-1，否则返回起始索引
+     */
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int c=gas.length;
+        int i=0;
+        while(i<c){
+            int sg=0;
+            int sc=0;
+            int cnt=0;
+            while(cnt<c){
+                int j=(i+cnt)%c;
+                sg+=gas[j];
+                sc+=cost[j];
+                if(sg<sc){
+                    break;
+                }else{
+                    cnt++;
+                }
+            }
+            if(cnt==c){
+                return i;
+            }else{
+                i=i+cnt+1;
+            }
+        }
+        return -1;
+    }
 
+    /**
+     * 135. 分发糖果
+     * 输入：ratings = [1,0,2]
+     * 输出：5
+     * 解释：你可以分别给第一个、第二个、第三个孩子分发 2、1、2 颗糖果。
+     * 你需要按照以下要求，给这些孩子分发糖果：
+     * 每个孩子至少分配到 1 个糖果。
+     * 相邻两个孩子评分更高的孩子会获得更多的糖果。
+     * @param ratings
+     * @return
+     * 贪心算法，两次遍历，一次从左到右，一次从右到左，两次局部最优值，达到全局最优值
+     */
+    public int candy(int[] ratings) {
+        int l=ratings.length;
+        int[] left=new int[l];
+        for(int i=0;i<l;i++){
+            if(i>0 && ratings[i]>ratings[i-1]){
+                left[i]=left[i-1]+1;
+            }
+            else{
+                left[i]=1;
+            }
+        }
+        int right=0,ret=0;
+        for(int i=l-1;i>=0;i--){
+            if(i<l-1 && ratings[i]>ratings[i+1]){
+                right++;
+            }else{
+                right=1;
+            }
+            ret+=Math.max(left[i],right);
+        }
+        return ret;
+    }
     public static void main(String[] args) {
-        int[] nums = {7,1,5,3,6,4};
+        int[] ratings = {1,0,2};
         LeetCode01 leetCode01 = new LeetCode01();
-        System.out.println(leetCode01.maxProfit2(nums));
+        System.out.println(leetCode01.candy(ratings));
 
     }
 }
