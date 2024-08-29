@@ -324,10 +324,60 @@ public class LeetCode01 {
         }
         return ret;
     }
+
+    /**
+     * 151.反转字符串中的单词
+     * 输入：s = "  hello world  "
+     * 输出："world hello"
+     * 解释：反转后的字符串中不能存在前导空格和尾随空格。
+     * @param s
+     * 双指针，从后向前遍历，遇到空格，则将空格之前的字符串添加到ret中，遇到非空格，则将空格之前的字符串添加到ret中，最后返回ret
+     */
+    public String reverseWords(String s) {
+        s=s.trim();
+        int j=s.length()-1,i=j;
+        StringBuilder ret = new StringBuilder();
+        while(i>=0){
+            while(i>=0 && s.charAt(i)!=' ') i--;
+            ret.append(s.substring(i+1,j+1)+" ");
+            while(i>=0 && s.charAt(i)==' ') i--;
+            j=i;
+        }
+        return ret.toString().trim();
+    }
+
+    /**
+     * 167. 两数之和 II - 输入有序数组
+     * 输入：numbers = [2,7,11,15], target = 9
+     * 输出：[1,2]
+     * 解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。
+     * @param numbers
+     * @param target
+     * @return
+     * 二分查找
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        for (int i = 0; i < numbers.length; ++i) {
+            int low = i + 1, high = numbers.length - 1;
+            while (low <= high) {
+                int mid = (high - low) / 2 + low;
+                if (numbers[mid] == target - numbers[i]) {
+                    return new int[]{i + 1, mid + 1};
+                } else if (numbers[mid] > target - numbers[i]) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
     public static void main(String[] args) {
-        int[] ratings = {1,0,2};
+        int[] numbers = {1,0,2};
+        int target = 1;
         LeetCode01 leetCode01 = new LeetCode01();
-        System.out.println(leetCode01.candy(ratings));
+        System.out.println(leetCode01.twoSum(numbers,target));
 
     }
 }
